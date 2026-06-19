@@ -53,17 +53,23 @@ $posts = $stmt->fetchAll();
 </head>
 <body>
 
-<div class="card-footer">
-    <?php if ($_SESSION['role'] === 'admin'): ?>
-        <a href="edit.php?id=<?= $post['id'] ?>" class="btn btn-warning btn-sm">✏️ Edit</a>
-        <a href="delete.php?id=<?= $post['id'] ?>"
-           class="btn btn-danger btn-sm"
-           onclick="return confirm('Are you sure?')">🗑️ Delete</a>
-    <?php else: ?>
-        <a href="edit.php?id=<?= $post['id'] ?>" class="btn btn-warning btn-sm">✏️ Edit</a>
-        <span class="badge bg-secondary">Only admins can delete</span>
-    <?php endif; ?>
-</div>
+<!-- Navbar -->
+<nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container">
+        <span class="navbar-brand">📝 My Blog</span>
+        <div>
+            <span class="text-white me-3">
+                Welcome, <?= htmlspecialchars($_SESSION['username']) ?>!
+                <span class="badge bg-<?= $_SESSION['role'] === 'admin' ? 'danger' : 'success' ?>">
+                    <?= $_SESSION['role'] ?>
+                </span>
+            </span>
+            <a href="dashboard.php" class="btn btn-outline-light btn-sm me-2">📊 Dashboard</a>
+            <a href="create.php" class="btn btn-success btn-sm me-2">+ New Post</a>
+            <a href="logout.php" class="btn btn-outline-light btn-sm">Logout</a>
+        </div>
+    </div>
+</nav>
 
 <div class="container">
     <!-- Search Form -->
@@ -102,9 +108,13 @@ $posts = $stmt->fetchAll();
                 </div>
                 <div class="card-footer">
                     <a href="edit.php?id=<?= $post['id'] ?>" class="btn btn-warning btn-sm">✏️ Edit</a>
-                    <a href="delete.php?id=<?= $post['id'] ?>"
-                       class="btn btn-danger btn-sm"
-                       onclick="return confirm('Are you sure you want to delete this post?')">🗑️ Delete</a>
+                    <?php if ($_SESSION['role'] === 'admin'): ?>
+                        <a href="delete.php?id=<?= $post['id'] ?>"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Are you sure you want to delete this post?')">🗑️ Delete</a>
+                    <?php else: ?>
+                        <span class="badge bg-secondary">Only admins can delete</span>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
